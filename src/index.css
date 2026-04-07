@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #22c55e; /* green-500 */
+  --color-primary-dark: #16a34a; /* green-600 */
+  --color-primary-light: #4ade80; /* green-400 */
+  
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+  
+  --shadow-premium: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-inner-soft: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-glow-primary: 0 0 20px rgba(34, 197, 94, 0.3);
+  --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(34, 197, 94, 0.2); }
+    50% { border-color: rgba(34, 197, 94, 0.5); }
+  }
+}
+
+/* Enable class-based dark mode in Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  * {
+    @apply transition-all duration-300;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-[#020617] dark:text-slate-100 antialiased selection:bg-primary/30 overflow-x-hidden;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors;
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/80 border border-white/20 dark:border-slate-800/20;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-dark;
+  }
+
+  .animate-blob {
+    animation: blob 10s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  .premium-card {
+    @apply bg-white dark:bg-slate-900/50 rounded-[2rem] border border-slate-200/60 dark:border-slate-800/60 shadow-premium dark:shadow-none hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10 dark:hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-500;
+  }
+
+  .hover-glow-primary {
+    @apply hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] dark:hover:shadow-[0_0_35px_rgba(34,197,94,0.15)];
+  }
+
+  .hover-glow-blue {
+    @apply hover:shadow-[0_0_25px_rgba(59,130,246,0.25)] dark:hover:shadow-[0_0_35px_rgba(59,130,246,0.15)];
+  }
+
+  .hover-glow-purple {
+    @apply hover:shadow-[0_0_25px_rgba(168,85,247,0.25)] dark:hover:shadow-[0_0_35px_rgba(168,85,247,0.15)];
+  }
+
+  .luminous-button {
+    @apply relative overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-95 transition-all;
+  }
+
+  .luminous-button::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite];
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  .upload-zone-active {
+    @apply border-primary bg-primary/5 shadow-glow-primary animate-[pulse-border_2s_infinite];
+  }
+
+  /* --- Design System: Controls --- */
+
+  /* Labels */
+  .label-premium {
+    @apply text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2 transition-colors;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply relative overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-95 bg-primary hover:bg-primary-dark text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] dark:hover:shadow-[0_0_35px_rgba(34,197,94,0.15)];
+  }
+
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite];
+  }
+
+  .btn-secondary {
+    @apply bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-slate-200 dark:border-slate-800 shadow-sm text-sm hover:shadow-[0_0_25px_rgba(59,130,246,0.25)] dark:hover:shadow-[0_0_35px_rgba(59,130,246,0.15)];
+  }
+
+  .btn-ghost {
+    @apply p-3 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-primary rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] dark:hover:shadow-[0_0_35px_rgba(34,197,94,0.15)];
+  }
+
+  .btn-danger {
+    @apply p-3 bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-2xl transition-all hover:shadow-[0_0_15px_rgba(239,68,68,0.2)];
+  }
+
+  /* Form Fields */
+  .input-field {
+    @apply w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl px-5 py-3.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-[inset_0_2px_4px_0_rgb(0_0_0_/_0.05)];
+  }
+
+  .select-field {
+    @apply w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl px-5 py-3.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none cursor-pointer shadow-[inset_0_2px_4px_0_rgb(0_0_0_/_0.05)];
+  }
+
+  .textarea-field {
+    @apply w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl px-5 py-3.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-[inset_0_2px_4px_0_rgb(0_0_0_/_0.05)] resize-none;
+  }
+
+  /* Toggle System */
+  .toggle-container {
+    @apply flex items-center gap-4 cursor-pointer p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-all hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] dark:hover:shadow-[0_0_35px_rgba(34,197,94,0.15)];
+  }
+
+  .toggle-switch-base {
+    @apply relative w-11 h-6 rounded-full transition-all duration-300 outline-none;
+  }
+
+  .toggle-switch-active {
+    @apply bg-primary shadow-lg shadow-primary/20;
+  }
+
+  .toggle-switch-inactive {
+    @apply bg-slate-200 dark:bg-slate-700;
+  }
+
+  .toggle-knob-base {
+    @apply absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 shadow-sm;
+  }
+}
