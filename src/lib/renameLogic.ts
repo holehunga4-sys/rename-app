@@ -107,13 +107,7 @@ export function resolveDuplicates(files: FileItem[]): FileItem[] {
 export function cleanFilenameForAi(filename: string): string {
   let name = filename;
   
-  // Remove file extension
-  const dotIndex = name.lastIndexOf('.');
-  if (dotIndex !== -1) {
-    name = name.substring(0, dotIndex);
-  }
-
-  // Remove leading numbers
+  // Remove leading numbers and separators (e.g., "14. ", "1- ", "01_")
   name = name.replace(/^\d+[\s\-_.]*/, '');
 
   // Remove trailing patterns like _1, -1

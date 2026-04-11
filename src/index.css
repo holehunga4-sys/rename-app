@@ -57,7 +57,7 @@
 
 @layer utilities {
   .glass-effect {
-    @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/80 border border-white/20 dark:border-slate-800/20;
+    @apply bg-white/70 dark:bg-slate-900/80 border border-white/20 dark:border-slate-800/20;
   }
   
   .text-gradient {
@@ -157,7 +157,7 @@
   }
 
   .toggle-switch-base {
-    @apply relative w-11 h-6 rounded-full transition-all duration-300 outline-none;
+    @apply relative w-10 h-5 rounded-full transition-all duration-300 outline-none shrink-0;
   }
 
   .toggle-switch-active {
@@ -169,6 +169,6 @@
   }
 
   .toggle-knob-base {
-    @apply absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 shadow-sm;
+    @apply absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-all duration-300 shadow-sm;
   }
 }
