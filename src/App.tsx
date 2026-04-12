@@ -43,7 +43,8 @@ import {
   ShoppingBag,
   Phone,
   ExternalLink,
-  ArrowRight
+  ArrowRight,
+  FolderOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import JSZip from 'jszip';
@@ -124,7 +125,8 @@ export default function App() {
     prefix: '',
     suffix: '',
     suffixList: [] as string[],
-    caseMode: 'Tự động'
+    caseMode: 'Tự động',
+    removeTrailingCode: false
   });
   const [isProcessingTitles, setIsProcessingTitles] = useState(false);
   const [selectedTitleFile, setSelectedTitleFile] = useState<any | null>(null);
@@ -320,7 +322,7 @@ export default function App() {
         const dotIndex = item.filename.lastIndexOf('.');
         const stem = dotIndex !== -1 ? item.filename.substring(0, dotIndex) : item.filename;
         
-        let mainText = cleanFilenameForAi(stem);
+        let mainText = cleanFilenameForAi(stem, titleOptions.removeTrailingCode);
         mainText = smartCase(mainText, titleOptions.caseMode);
         
         const currentSuffix = titleOptions.suffixList.length > 0
@@ -412,29 +414,48 @@ export default function App() {
         {/* Dropzone */}
         <motion.div 
           whileHover={{ scale: 1.01, y: -2 }}
-          className="relative group cursor-pointer"
+          className="relative group"
           onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add('upload-zone-active'); }}
           onDragLeave={e => { e.preventDefault(); e.currentTarget.classList.remove('upload-zone-active'); }}
           onDrop={e => {
             e.preventDefault();
             e.currentTarget.classList.remove('upload-zone-active');
-            addFiles(Array.from(e.dataTransfer.files));
+            if (e.dataTransfer.files) {
+              addFiles(Array.from(e.dataTransfer.files));
+            }
           }}
         >
-          <input 
-            type="file" 
-            multiple 
-            accept={SUPPORTED_EXTENSIONS.map(ext => `.${ext}`).join(',')}
-            onChange={handleFileSelect}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-          />
           <div className="premium-card p-6 flex flex-col items-center justify-center gap-4 group-hover:border-primary group-hover:bg-primary/5 hover-glow-primary transition-all duration-500 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg shadow-primary/10 relative z-10">
               <Upload className="text-primary" size={24} />
             </div>
-            <div className="text-center space-y-1 relative z-10">
-              <p className="text-sm font-black text-slate-800 dark:text-white">Kéo thả hoặc nhấn chọn ảnh</p>
+            <div className="text-center space-y-3 relative z-10 w-full">
+              <p className="text-sm font-black text-slate-800 dark:text-white">Kéo thả ảnh hoặc thư mục vào đây</p>
+              <div className="flex flex-col gap-2 w-full mt-2">
+                <label className="w-full cursor-pointer bg-primary text-white py-2 px-4 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors text-center shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+                  <Upload size={16} />
+                  Chọn Ảnh
+                  <input 
+                    type="file" 
+                    multiple 
+                    accept={SUPPORTED_EXTENSIONS.map(ext => `.${ext}`).join(',')}
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </label>
+                <label className="w-full cursor-pointer bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-2 px-4 rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center shadow-sm flex items-center justify-center gap-2">
+                  <FolderOpen size={16} />
+                  Chọn Thư Mục
+                  <input 
+                    type="file" 
+                    webkitdirectory="" 
+                    directory=""
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </label>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -827,7 +848,7 @@ export default function App() {
         {/* Dropzone */}
         <motion.div 
           whileHover={{ scale: 1.01, y: -2 }}
-          className="relative group cursor-pointer"
+          className="relative group"
           onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add('upload-zone-active'); }}
           onDragLeave={e => { e.preventDefault(); e.currentTarget.classList.remove('upload-zone-active'); }}
           onDrop={e => {
@@ -855,20 +876,37 @@ export default function App() {
             }
           }}
         >
-          <input 
-            type="file" 
-            multiple 
-            accept={SUPPORTED_EXTENSIONS.map(ext => `.${ext}`).join(',')}
-            onChange={handleTitleFileSelect}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-          />
           <div className="premium-card p-6 flex flex-col items-center justify-center gap-4 group-hover:border-primary group-hover:bg-primary/5 hover-glow-primary transition-all duration-500 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg shadow-primary/10 relative z-10">
               <Upload className="text-primary" size={24} />
             </div>
-            <div className="text-center space-y-1 relative z-10">
-              <p className="text-sm font-black text-slate-800 dark:text-white">Kéo thả hoặc nhấn chọn ảnh</p>
+            <div className="text-center space-y-3 relative z-10 w-full">
+              <p className="text-sm font-black text-slate-800 dark:text-white">Kéo thả ảnh hoặc thư mục vào đây</p>
+              <div className="flex flex-col gap-2 w-full mt-2">
+                <label className="w-full cursor-pointer bg-primary text-white py-2 px-4 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors text-center shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+                  <Upload size={16} />
+                  Chọn Ảnh
+                  <input 
+                    type="file" 
+                    multiple 
+                    accept={SUPPORTED_EXTENSIONS.map(ext => `.${ext}`).join(',')}
+                    onChange={handleTitleFileSelect}
+                    className="hidden"
+                  />
+                </label>
+                <label className="w-full cursor-pointer bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-2 px-4 rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center shadow-sm flex items-center justify-center gap-2">
+                  <FolderOpen size={16} />
+                  Chọn Thư Mục
+                  <input 
+                    type="file" 
+                    webkitdirectory="" 
+                    directory=""
+                    onChange={handleTitleFileSelect}
+                    className="hidden"
+                  />
+                </label>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -939,6 +977,22 @@ export default function App() {
                   </div>
                 </div>
               </div>
+              
+              <label className="flex items-center gap-2 cursor-pointer group p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <div className="relative flex items-center justify-center">
+                  <input 
+                    type="checkbox" 
+                    checked={titleOptions.removeTrailingCode}
+                    onChange={e => setTitleOptions({...titleOptions, removeTrailingCode: e.target.checked})}
+                    className="peer sr-only"
+                  />
+                  <div className="w-4 h-4 border-2 border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-800 peer-checked:bg-primary peer-checked:border-primary transition-all"></div>
+                  <Check size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+                </div>
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">
+                  Tự động xóa mã ở cuối (VD: ND12345)
+                </span>
+              </label>
             </div>
           </div>
         </section>

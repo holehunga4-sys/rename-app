@@ -104,7 +104,7 @@ export function resolveDuplicates(files: FileItem[]): FileItem[] {
   });
 }
 
-export function cleanFilenameForAi(filename: string): string {
+export function cleanFilenameForAi(filename: string, removeTrailingCode: boolean = false): string {
   let name = filename;
   
   // Remove leading numbers and separators (e.g., "14. ", "1- ", "01_")
@@ -118,6 +118,16 @@ export function cleanFilenameForAi(filename: string): string {
 
   // Remove extra spaces
   name = name.replace(/\s+/g, ' ').trim();
+
+  if (removeTrailingCode) {
+    // Remove the last word if it contains digits and is > 4 characters long
+    // This targets SKUs like ND12052520 or LL0116251212
+    name = name.replace(/\s+[A-Za-z0-9]*[0-9][A-Za-z0-9]*$/, (match) => {
+      if (match.trim().length > 4) return '';
+      return match;
+    });
+    name = name.trim();
+  }
 
   return name;
 }
