@@ -913,10 +913,10 @@ export default function App() {
 
         <section className="premium-card p-6 hover-glow-primary">
           <h2 className="text-sm font-bold mb-6 flex items-center gap-3 text-slate-800 dark:text-white">
-            <div className="p-2 bg-primary/10 rounded-lg shadow-inner shadow-primary/5">
-              <Settings2 size={16} className="text-primary" />
+            <div className="p-2 bg-primary/10 rounded-lg shadow-inner shadow-primary/5 animate-pulse">
+              <Zap size={16} className="text-primary" />
             </div>
-            Thiết lập Title
+            Thiết lập Title (Mới ✨)
           </h2>
           
           <div className="space-y-5">
@@ -961,7 +961,26 @@ export default function App() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="p-3 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-all cursor-pointer group">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <div className="relative flex items-center justify-center">
+                    <input 
+                      type="checkbox" 
+                      checked={titleOptions.removeTrailingCode}
+                      onChange={e => setTitleOptions({...titleOptions, removeTrailingCode: e.target.checked})}
+                      className="peer sr-only"
+                    />
+                    <div className="w-5 h-5 border-2 border-primary/30 rounded-lg bg-white dark:bg-slate-800 peer-checked:bg-primary peer-checked:border-primary transition-all shadow-sm"></div>
+                    <Check size={14} className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-tight">Tính năng đặc biệt ✨</span>
+                    <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Tự động xóa mã ở cuối (VD: ND12345)</span>
+                  </div>
+                </label>
+              </div>
+
               <div className="space-y-1 group">
                 <label className="label-premium !mb-1 !text-[9px]">Chuẩn hóa chữ</label>
                 <div className="relative">
@@ -977,22 +996,6 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              
-              <label className="flex items-center gap-2 cursor-pointer group p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                <div className="relative flex items-center justify-center">
-                  <input 
-                    type="checkbox" 
-                    checked={titleOptions.removeTrailingCode}
-                    onChange={e => setTitleOptions({...titleOptions, removeTrailingCode: e.target.checked})}
-                    className="peer sr-only"
-                  />
-                  <div className="w-4 h-4 border-2 border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-800 peer-checked:bg-primary peer-checked:border-primary transition-all"></div>
-                  <Check size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
-                </div>
-                <span className="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">
-                  Tự động xóa mã ở cuối (VD: ND12345)
-                </span>
-              </label>
             </div>
           </div>
         </section>
@@ -1432,7 +1435,7 @@ export default function App() {
           <nav className="hidden md:flex items-center bg-slate-100/50 dark:bg-slate-800/40 p-1 rounded-xl border border-slate-200/40 dark:border-slate-700/40 relative z-10">
             {[
               { id: 'rename', label: 'Đổi tên', icon: LayoutGrid },
-              { id: 'write-title', label: 'Viết Title', icon: Type },
+              { id: 'write-title', label: 'Viết Title ✨', icon: Type },
               { id: 'info', label: 'Thông tin', icon: Info },
             ].map((tab) => (
               <button
